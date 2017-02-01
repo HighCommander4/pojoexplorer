@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="build" name="PojoExplorer">
+    <property environment="env"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.6"/>
+    <property name="source" value="1.6"/>
+    <path id="PojoExplorer.classpath">
+        <pathelement location="bin"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="init" name="build">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="PojoExplorer.classpath"/>
+        </javac>
+    </target>
+
+    <target name="PojoExplorer">
+        <java classname="joecohen.PojoExplorer" failonerror="true" fork="yes">
+            <classpath refid="PojoExplorer.classpath"/>
+        </java>
+    </target>
+	
+	<target name="jar" depends="build">
+	<jar destfile="pojoexplorer.jar">
+	    <fileset dir="bin" />
+	    <fileset dir="src" includes="**/*.java"/>
+	</jar>
+	</target>
+</project>
